@@ -1,6 +1,6 @@
 package repositories;
 import database.DatabaseConnection;
-import entities.Raca;
+import entidades.Raca;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +15,7 @@ public class RacaRepository {
     // Método para salvar uma instância de Raca no banco de dados
     public void salvarRaca(Raca raca) {
         // Comando SQL para inserir uma nova raça com os valores especificados
-        String sql = "INSERT INTO raca (nome, bonus_vida, bonus_escudo, bonus_poder_fisico, bonus_poder_habilidade) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO racas (nome, bonus_vida, bonus_escudo, bonus_poder_fisico, bonus_poder_habilidade) VALUES (?, ?, ?, ?, ?)";
 
         // Tenta conectar ao banco de dados e preparar a execução do comando SQL
         try (Connection conexao = DatabaseConnection.conectar();
@@ -52,7 +52,7 @@ public class RacaRepository {
         // Lista para armazenar as raças encontradas
         List<Raca> racas = new ArrayList<>();
         // Comando SQL para selecionar todas as raças
-        String sql = "SELECT * FROM raca";
+        String sql = "SELECT * FROM racas";
 
         // Tenta conectar ao banco de dados e executar o comando SQL
         try (Connection conexao = DatabaseConnection.conectar();
@@ -84,7 +84,7 @@ public class RacaRepository {
     // Método para buscar uma raça específica pelo ID
     public Raca buscarRacaPorId(int id) {
         // Comando SQL para selecionar a raça pelo ID
-        String sql = "SELECT * FROM raca WHERE id = ?";
+        String sql = "SELECT * FROM racas WHERE id = ?";
         Raca raca = null;
 
         // Tenta conectar ao banco de dados e executar o comando SQL

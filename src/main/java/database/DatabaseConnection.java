@@ -20,15 +20,19 @@ public class DatabaseConnection {
 
     // Método para conectar ao banco de dados e inicializar se necessário
     public static Connection conectar() throws SQLException {
-        // Estabelece a conexão com o banco de dados usando as credenciais fornecidas
+        // Estabelece a conexão com o banco de dados usando as credenciais fornecida
+        if (databaseInitialized){
+           return DriverManager.getConnection(URL + "rpg", USER, PASSWORD);
+        }
+
         Connection conexao = DriverManager.getConnection(URL, USER, PASSWORD);
+
         // Verifica se o banco já foi inicializado
-        if (!databaseInitialized) {
             // Inicializa o banco de dados, executando o script SQL necessário
             inicializarBancoDeDados(conexao);
             // Marca o banco como inicializado
             databaseInitialized = true;
-        }
+
         // Retorna a conexão estabelecida
         return conexao;
     }

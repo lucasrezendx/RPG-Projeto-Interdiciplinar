@@ -1,6 +1,6 @@
 package repositories;
 import database.DatabaseConnection;
-import entities.Personagem;
+import entidades.Personagem;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +12,13 @@ import java.util.List;
 // Classe responsável por acessar e manipular os dados da entidade Raca no banco de dados
 public class PersonagemRepository {
 
+    private final ClasseRepository classeRepository = new ClasseRepository();
+    private final RacaRepository racaRepository = new RacaRepository();
+
     // Método para salvar uma instância de Raca no banco de dados
     public void salvarPersonagem(Personagem personagem) {
         // Comando SQL para inserir uma nova raça com os valores especificados
-        String sql = "INSERT INTO personagem (nome, vida, escudo, poder_fisico, poder_habilidade, raca_id, classe_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO personagens (nome, vida, escudo, poder_fisico, poder_habilidade, raca_id, classe_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         // Tenta conectar ao banco de dados e preparar a execução do comando SQL
         try (Connection conexao = DatabaseConnection.conectar();
@@ -63,15 +66,15 @@ public class PersonagemRepository {
 
             // Itera sobre os resultados e cria objetos Raca para cada linha
             while (rs.next()) {
-                Personagem personagem = new personagem();
+                Personagem personagem = new Personagem();
                 personagem.setId(rs.getInt("id"));
                 personagem.setNome(rs.getString("nome"));
                 personagem.setVida(rs.getInt("vida"));
                 personagem.setEscudo(rs.getInt("escudo"));
                 personagem.setPoderFisico(rs.getInt("poder_fisico"));
                 personagem.setPoderHabilidade(rs.getInt("poder_habilidade"));
-                personagem.setRacaId(rs.getInt("raca_id"));
-                personagem.setClasseId(rs.getInt("classe_id"));
+                personagem.setRaca(racaRepository.buscarRacaPorId(rs.getInt("raca_id")));
+                personagem.setClasse(classeRepository.buscarClassePorId(rs.getInt("classe_id")));
                 // Adiciona a raça à lista
                 personagens.add(personagem);
             }
@@ -85,7 +88,7 @@ public class PersonagemRepository {
         return personagens;
     }
 
-    // Método para buscar uma raça específica pelo ID
+    // Método para buscar uma personagem específica pelo ID
     public Personagem buscarPersonagemPorId(int id) {
         // Comando SQL para selecionar a raça pelo ID
         String sql = "SELECT * FROM personagens WHERE id = ?";
@@ -104,12 +107,12 @@ public class PersonagemRepository {
                     personagem = new Personagem();
                     personagem.setId(rs.getInt("id"));
                     personagem.setNome(rs.getString("nome"));
-                    personagem.setBonusVida(rs.getInt("vida"));
-                    personagem.setBonusEscudo(rs.getInt("escudo"));
-                    personagem.setBonusPoderFisico(rs.getInt("poder_fisico"));
-                    personagem.setBonusPoderHabilidade(rs.getInt("poder_habilidade"));
-                    personagem.setRacaId(rs.getInt("raca_id"));
-                    personagem.setClasseId(rs.getInt("classe_id"));
+                    personagem.setVida(rs.getInt("vida"));
+                    personagem.setEscudo(rs.getInt("escudo"));
+                    personagem.setPoderFisico(rs.getInt("poder_fisico"));
+                    personagem.setPoderHabilidade(rs.getInt("poder_habilidade"));
+                    personagem.setRaca(racaRepository.buscarRacaPorId(rs.getInt("raca_id")));
+                    personagem.setClasse(classeRepository.buscarClassePorId(rs.getInt("classe_id")));
                 }
             }
 
